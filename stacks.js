@@ -22,54 +22,52 @@ let rword = "";
 
 // put letters of word into stack
 for (let i = 0; i < word.length; i++) {
-  letters.push(word[i]);
+    letters.push(word[i]);
 }
 
 // pop off the stack in reverse order
 for (let i = 0; i < word.length; i++) {
-  rword += letters.pop();
+    rword += letters.pop();
 }
 
 if (rword === word) {
-  console.log(`${word} is palindrome`);
+    console.log(`${word} is palindrome`);
 } else {
-  console.log(`${word} is not a palindrome`);
+    console.log(`${word} is not a palindrome`);
 }
-
 
 // Create a stack
 let Stack = function () {
-  this.count = 0;
-  this.storage = {};
+    this.count = 0;
+    this.storage = {};
 
-  // add value onto the end or top of the stack
-  this.push = function(value) {
-    this.storage[this.count] = value;
-    this.count++;
-  }
+    // add value onto the end or top of the stack
+    this.push = function (value) {
+        this.storage[this.count] = value;
+        this.count++;
+    };
 
-  // removes and returns the value at the top of the stack
-  this.pop = function() {
-    if (this.count === 0) {
-      return undefined;
-    }
+    // removes and returns the value at the top of the stack
+    this.pop = function () {
+        if (this.count === 0) {
+            return undefined;
+        }
 
-    this.count--;
-    let result = this.storage[this.count];
-    delete this.storage[this.count];
-    return result;
-  }
+        this.count--;
+        let result = this.storage[this.count];
+        delete this.storage[this.count];
+        return result;
+    };
 
-  this.size = function() {
-    return this.count;
-  }
+    this.size = function () {
+        return this.count;
+    };
 
-  // return the value at the end of the stack
-  this.peek = function() {
-    return this.storage[this.count-1];
-  }
-}
-
+    // return the value at the end of the stack
+    this.peek = function () {
+        return this.storage[this.count - 1];
+    };
+};
 
 let myStack = new Stack();
 myStack.push(1);

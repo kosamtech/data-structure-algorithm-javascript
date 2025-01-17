@@ -14,7 +14,7 @@
 
 // Binary heaps are also complete binary trees; this means that all levels of the tree are fully filled and is the last level is partially filled; it is filled from left to right
 
-// Binary heaps may be implemeted as tree structures with nodes that contain left and right references 
+// Binary heaps may be implemeted as tree structures with nodes that contain left and right references
 
 // However heaps are more often implemented as arrays
 
@@ -32,144 +32,146 @@
 
 // when representing a heap leave index 0 as null
 
-
-
-let MinHeap = function() {
-  let heap = [null];
-
-  this.insert = function(num) {
-    heap.push(num);
-    if (heap.length > 2) {
-      let index = heap.length - 1;
-      while (heap[index] < heap[Math.floor(index/2)]) {
-        if (index >= 1) {
-          [ heap[Math.floor(index/2)], heap[index] ] = [ heap[index], heap[Math.floor(index /2 )] ];
-          if (Math.floor(index/2) > 1) {
-            index = Math.floor(index/2)
-          } else {
-            break;
-          }
-        }
-      }
+class MinHeap {
+    constructor() {
+        this._heap = [null];
     }
-  }
+    insert(num) {
+        this._heap.push(num);
+        if (this._heap.length > 2) {
+            let index = this._heap.length - 1;
+            while (this._heap[index] < this._heap[Math.floor(index / 2)]) {
+                if (index >= 1) {
+                    [this._heap[Math.floor(index / 2)], this._heap[index]] = [
+                        this._heap[index],
+                        this._heap[Math.floor(index / 2)],
+                    ];
+                    if (Math.floor(index / 2) > 1) {
+                        index = Math.floor(index / 2);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    };
 
-
-  this.remove = function() {
-    let smallest = heap[1];
-    if (heap.length > 2) {
-      heap[1] = heap[heap.length - 1];
-      heap.splice(heap.length - 1);
-      if (heap.length === 3) {
-        if (heap[1] > heap[2]) {
-          [ heap[1], heap[2] ] = [ heap[2], heap[1] ];
+    remove() {
+        let smallest = this._heap[1];
+        if (this._heap.length > 2) {
+            this._heap[1] = this._heap[this._heap.length - 1];
+            this._heap.splice(this._heap.length - 1);
+            if (this._heap.length === 3) {
+                if (this._heap[1] > this._heap[2]) {
+                    [this._heap[1], this._heap[2]] = [this._heap[2], this._heap[1]];
+                }
+                return smallest;
+            }
+            let i = 1;
+            let left = 2 * i;
+            let right = 2 * i + 1;
+            while (this._heap[i] >= this._heap[left] || this._heap[i] >= this._heap[right]) {
+                if (this._heap[left] < this._heap[right]) {
+                    [this._heap[i], this._heap[left]] = [this._heap[left], this._heap[i]];
+                    i = 2 * i;
+                } else {
+                    [this._heap[i], this._heap[right]] = [this._heap[right], this._heap[i]];
+                    i = 2 * i + 1;
+                }
+                left = 2 * i;
+                right = 2 * i + 1;
+                if (this._heap[left] === undefined || this._heap[right] === undefined) {
+                    break;
+                }
+            }
+        } else if (this._heap.length === 2) {
+            this._heap.splice(1, 1);
+        } else {
+            return null;
         }
         return smallest;
-      }
-      let i = 1;
-      let left = 2 * i;
-      let right = 2 * i + 1;
-      while (heap[i] >= heap[left] || heap[i] >= heap[right]) {
-        if (heap[left] < heap[right]) {
-          [ heap[i], heap[left] ] = [ heap[left], heap[i]];
-          i = 2 * i;
+    };
+
+    sort() {
+        let result = new Array();
+        while (this._heap.length > 1) {
+            result.push(this.remove());
+        }
+        return result;
+    };
+}
+
+class MaxHeap {
+    constructor() {
+        this._heap = [null];
+    }
+
+    print = () => this._heap;
+
+    insert(num) {
+        this._heap.push(num);
+        if (this._heap.length > 2) {
+            let index = this._heap.length - 1;
+            while (this._heap[index] > this._heap[Math.floor(index / 2)]) {
+                if (index >= 1) {
+                    [this._heap[Math.floor(index / 2)], this._heap[index]] = [
+                        this._heap[index],
+                        this._heap[Math.floor(index / 2)],
+                    ];
+                    if (Math.floor(index / 2) > 1) {
+                        index = Math.floor(index / 2);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    };
+
+    remove() {
+        let smallest = this._heap[1];
+        if (this._heap.length > 2) {
+            this._heap[1] = this._heap[this._heap.length - 1];
+            this._heap.splice(this._heap.length - 1);
+            if (this._heap.length == 3) {
+                if (this._heap[1] < this._heap[2]) {
+                    [this._heap[1], this._heap[2]] = [this._heap[2], this._heap[1]];
+                }
+                return smallest;
+            }
+            let i = 1;
+            let left = 2 * i;
+            let right = 2 * i + 1;
+            while (this._heap[i] <= this._heap[left] || this._heap[i] <= this._heap[right]) {
+                if (this._heap[left] > this._heap[right]) {
+                    [this._heap[i], this._heap[left]] = [this._heap[left], this._heap[i]];
+                    i = 2 * i;
+                } else {
+                    [this._heap[i], this._heap[right]] = [this._heap[right], this._heap[i]];
+                    i = 2 * i + 1;
+                }
+                left = 2 * i;
+                right = 2 * i + 1;
+                if (this._heap[left] == undefined || this._heap[right] == undefined) {
+                    break;
+                }
+            }
+        } else if (this._heap.length == 2) {
+            this._heap.splice(1, 1);
         } else {
-          [ heap[i], heap[right] ] = [ heap[right], heap[i] ];
-          i = 2 * i + 1;
+            return null;
         }
-        left = 2 * i;
-        right = 2 * i + 1;
-        if (heap[left] === undefined || heap[right] === undefined) {
-          break;
-        }
-      }
-    } else if (heap.length === 2) {
-      heap.splice(1, 1);
-    } else {
-      return null;
-    }
-    return smallest;
-  }
-
-
-  this.sort = function() {
-    let result = new Array();
-    while (heap.length > 1) {
-      result.push(this.remove());
+        return smallest;
     };
-    return result;
-  }
-}
 
-
-let MaxHeap = function() {
-
-  let heap = [null];
-
-  this.print = () => heap;
-
-  this.insert = function(num) {
-    heap.push(num);
-    if (heap.length > 2) {
-      let index = heap.length - 1;
-      while (heap[index] > heap[Math.floor(index/2)]) {
-        if (index >= 1) {
-          [ heap[Math.floor(index/2)], heap[index] ] = [ heap[index], heap[Math.floor(index/2)] ];
-          if (Math.floor(index/2) > 1) {
-            index = Math.floor(index/2);
-          } else {
-            break;
-          }
+    sort() {
+        let result = new Array();
+        while (this._heap.length > 1) {
+            result.push(this.remove());
         }
-      }
-    }
-  }
-
-  this.remove = function() {
-		let smallest = heap[1];
-		if (heap.length > 2) {
-			heap[1] = heap[heap.length - 1];
-			heap.splice(heap.length - 1);
-			if (heap.length == 3) {
-				if (heap[1] < heap[2]) {
-					[heap[1], heap[2]] = [heap[2], heap[1]];
-				};
-				return smallest;
-			};
-			let i = 1;
-			let left = 2 * i;
-			let right = 2 * i + 1;
-			while (heap[i] <= heap[left] || heap[i] <= heap[right]) {
-				if (heap[left] > heap[right]) {
-					[heap[i], heap[left]] = [heap[left], heap[i]];
-					i = 2 * i
-				} else {
-					[heap[i], heap[right]] = [heap[right], heap[i]];
-					i = 2 * i + 1;
-				};
-				left = 2 * i;
-				right = 2 * i + 1;
-				if (heap[left] == undefined || heap[right] == undefined) {
-					break;
-				};
-			};
-		} else if (heap.length == 2) {
-			heap.splice(1, 1);
-		} else {
-			return null;
-		};
-		return smallest;
-	};
-
-  this.sort = function() {
-    let result = new Array();
-    while (heap.length > 1) {
-      result.push(this.remove());
+        return result;
     };
-    return result;
-  }
 }
-
 
 let minHeap = new MinHeap();
 minHeap.insert(3);
@@ -180,7 +182,6 @@ minHeap.insert(5);
 minHeap.insert(12);
 minHeap.insert(11);
 console.log(minHeap.sort());
-
 
 let maxHeap = new MaxHeap();
 maxHeap.insert(3);
